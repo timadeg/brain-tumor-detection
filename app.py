@@ -8,7 +8,7 @@ import zipfile
 import gdown
 
 # URL of the model on Google Drive (public sharing link)
-MODEL_URL = "https://drive.google.com/file/d/1WtREQ7fGoZoEfOTdBL1ptoS30UNN8oUI"    
+MODEL_URL = "https://drive.google.com/file/d/1WtREQ7fGoZoEfOTdBL1ptoS30UNN8oUI"   
 # Directory to save the downloaded model
 MODEL_DIR = "model"
 
@@ -19,7 +19,7 @@ def download_and_extract_model(url, model_dir):
 
     # Download the model using gdown
     model_zip_path = os.path.join(model_dir, "model.zip")
-    gdown.download(url, model_zip_path, quiet=False)
+    gdown.download(url, model_zip_path, quiet=False, fuzzy=True)
 
     # Extract the model if it is a zip file
     with zipfile.ZipFile(model_zip_path, 'r') as zip_ref:
