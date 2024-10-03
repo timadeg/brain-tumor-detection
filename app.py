@@ -8,7 +8,8 @@ import zipfile
 import gdown
 
 # URL of the model on Google Drive (public sharing link)
-MODEL_URL = "https://drive.google.com/file/d/1WtREQ7fGoZoEfOTdBL1ptoS30UNN8oUI"   
+MODEL_URL = "https://drive.google.com/uc?id=1WtREQ7fGoZoEfOTdBL1ptoS30UNN8oUI"
+
 # Directory to save the downloaded model
 MODEL_DIR = "model"
 
