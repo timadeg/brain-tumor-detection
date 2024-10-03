@@ -1,40 +1,27 @@
-
 import streamlit as st
 import tensorflow as tf
 import numpy as np
 from PIL import Image
 import os
-import zipfile
 import gdown
 
-# URL of the model on Google Drive (public sharing link)
-MODEL_URL = "https://drive.google.com/uc?id=1WtREQ7fGoZoEfOTdBL1ptoS30UNN8oUI"
+# URL of the model on Google Drive (direct download link format)
+MODEL_URL = "https://drive.google.com/uc?id=1cfFcl_Aric2g-1_GDyldZxE71F3Tou3u"  
+MODEL_PATH = "model/model.h5"
 
-# Directory to save the downloaded model
-MODEL_DIR = "model"
-
-# Function to download and extract the model
-def download_and_extract_model(url, model_dir):
-    if not os.path.exists(model_dir):
-        os.makedirs(model_dir)
+# Function to download the model
+def download_model(url, model_path):
+    if not os.path.exists(os.path.dirname(model_path)):
+        os.makedirs(os.path.dirname(model_path))
 
     # Download the model using gdown
-    model_zip_path = os.path.join(model_dir, "model.zip")
-    gdown.download(url, model_zip_path, quiet=False, fuzzy=True)
+    gdown.download(url, model_path, quiet=False)
 
-    # Extract the model if it is a zip file
-    with zipfile.ZipFile(model_zip_path, 'r') as zip_ref:
-        zip_ref.extractall(model_dir)
-
-    # Clean up the zip file
-    os.remove(model_zip_path)
-
-# Download and extract the model
-download_and_extract_model(MODEL_URL, MODEL_DIR)
+# Download the model
+download_model(MODEL_URL, MODEL_PATH)
 
 # Load the model
-export_path = os.path.join(MODEL_DIR, "model_directory")  # Replace with the extracted model directory name
-model = tf.keras.models.load_model(export_path)
+model = tf.keras.models.load_model(MODEL_PATH)
 
 # Function to preprocess the uploaded image
 def preprocess_image(image):
