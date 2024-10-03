@@ -1,11 +1,11 @@
+tensorflow==2.17.0
+tensorflow-hub==0.14.0  # Update tensorflow-hub to a compatible version
+streamlit==1.39.0
 ipykernel==6.29.5
 ipython==8.28.0
 matplotlib==3.9.2
 numpy==1.26.4
 pillow==10.4.0
 setuptools==75.1.0
-tensorflow==2.10.0
-tensorflow_hub==0.12.0
-streamlit
 pandas
 gdown
