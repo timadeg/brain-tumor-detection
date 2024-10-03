@@ -6,16 +6,18 @@ import os
 import gdown
 
 # URL of the model on Google Drive (direct download link format)
-MODEL_URL = "https://drive.google.com/uc?id=1Nfm7Qndg6IO3lbfRR_nKdlduJ8VV8g2W"  
-MODEL_PATH = "model.h5"
+MODEL_URL = "https://drive.google.com/uc?id=1WtREQ7fGoZoEfOTdBL1ptoS30UNN8oUI"  # Correct Google Drive URL format
+MODEL_DIR = "model"
+MODEL_PATH = os.path.join(MODEL_DIR, "model.h5")
 
 # Function to download the model
 def download_model(url, model_path):
+    # Create model directory if it doesn't exist
     if not os.path.exists(os.path.dirname(model_path)):
         os.makedirs(os.path.dirname(model_path))
-
+    
     # Download the model using gdown
-    gdown.download(url, model_path, quiet=False)
+    gdown.download(url, model_path, quiet=False, fuzzy=True)
 
 # Download the model
 download_model(MODEL_URL, MODEL_PATH)
