@@ -1,33 +1,51 @@
 import streamlit as st
 import tensorflow as tf
+import tensorflow_hub as hub
 import numpy as np
 from PIL import Image
 import os
 import gdown
 
 # URL of the model on Google Drive (direct download link format)
-MODEL_URL = "https://drive.google.com/uc?id=1WtREQ7fGoZoEfOTdBL1ptoS30UNN8oUI"  # Correct Google Drive URL format
+MODEL_URL = "https://drive.google.com/uc?id=1WtREQ7fGoZoEfOTdBL1ptoS30UNN8oUI"
 MODEL_DIR = "model"
 MODEL_PATH = os.path.join(MODEL_DIR, "model.h5")
 
+# Expected size of the downloaded model file in bytes (check the actual size)
+EXPECTED_FILE_SIZE = 85 * 1024 * 1024  # Update this with the actual size in bytes
+
 # Function to download the model
 def download_model(url, model_path):
-    # Create model directory if it doesn't exist
+    # Remove existing corrupted file if any
+    if os.path.exists(model_path):
+        os.remove(model_path)
+        
     if not os.path.exists(os.path.dirname(model_path)):
         os.makedirs(os.path.dirname(model_path))
-    
+
     # Download the model using gdown
     gdown.download(url, model_path, quiet=False, fuzzy=True)
 
-# Download the model
-download_model(MODEL_URL, MODEL_PATH)
+    # Verify the downloaded file size
+    if os.path.getsize(model_path) != EXPECTED_FILE_SIZE:
+        st.error("The downloaded file size does not match the expected size. Download might be corrupted.")
+        return False
 
-# Load the model
-model = tf.keras.models.load_model(MODEL_PATH)
+    return True
+
+# Download the model
+if download_model(MODEL_URL, MODEL_PATH):
+    try:
+        # Load the model with custom objects
+        model = tf.keras.models.load_model(MODEL_PATH, custom_objects={'KerasLayer': hub.KerasLayer})
+    except Exception as e:
+        st.error(f"Error loading the model: {e}")
+        st.stop()
+else:
+    st.stop()
 
 # Function to preprocess the uploaded image
 def preprocess_image(image):
-    # Convert image to RGB if it is not
     if image.mode != 'RGB':
         image = image.convert('RGB')
     img = image.resize((224, 224))  # Resize to the input size expected by the model
@@ -53,11 +71,14 @@ if uploaded_file is not None:
     input_data = preprocess_image(image)
     
     # Make prediction
-    predictions = model.predict(input_data)  # Directly call the model with the input data
-    predicted_class = np.argmax(predictions, axis=1)  # Get the index of the highest probability
-    
-    # Display the result
-    if predicted_class[0] == 0:
-        st.write("The model predicts: **No Brain Tumor Detected.**")
-    else:
-        st.write("The model predicts: **Brain Tumor Detected.**")
+    try:
+        predictions = model.predict(input_data)
+        predicted_class = np.argmax(predictions, axis=1)  # Get the index of the highest probability
+        
+        # Display the result
+        if predicted_class[0] == 0:
+            st.write("The model predicts: **No Brain Tumor Detected.**")
+        else:
+            st.write("The model predicts: **Brain Tumor Detected.**")
+    except Exception as e:
+        st.error(f"Error during prediction: {e}")
