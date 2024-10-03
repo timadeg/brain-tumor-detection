@@ -4,10 +4,8 @@ matplotlib==3.9.2
 numpy==1.26.4
 pillow==10.4.0
 setuptools==75.1.0
-tensorboard==2.17.1
-tensorboard-data-server==0.7.2
-tensorflow==2.17.0
-tensorflow-hub==0.12.0
+tensorFlow 2.10.0
+tensorflow_hub 0.12.0
 streamlit
 pandas
 gdown
