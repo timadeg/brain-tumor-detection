@@ -7,7 +7,7 @@ import gdown
 
 # URL of the model on Google Drive (direct download link format)
 MODEL_URL = "https://drive.google.com/uc?id=1cfFcl_Aric2g-1_GDyldZxE71F3Tou3u"  
-MODEL_PATH = "model/model.h5"
+MODEL_PATH = "model.h5"
 
 # Function to download the model
 def download_model(url, model_path):
