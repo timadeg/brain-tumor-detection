@@ -6,13 +6,10 @@ from PIL import Image
 import os
 import gdown
 
-# URL of the model on Google Drive (direct download link format)
+# URL of the saved model on Google Drive (direct download link format)
 MODEL_URL = "https://drive.google.com/uc?id=1WtREQ7fGoZoEfOTdBL1ptoS30UNN8oUI"
 MODEL_DIR = "model"
 MODEL_PATH = os.path.join(MODEL_DIR, "model.h5")
-
-# Expected size of the downloaded model file in bytes (check the actual size)
-EXPECTED_FILE_SIZE = 85 * 1024 * 1024  # Update this with the actual size in bytes
 
 # Function to download the model
 def download_model(url, model_path):
@@ -25,11 +22,6 @@ def download_model(url, model_path):
 
     # Download the model using gdown
     gdown.download(url, model_path, quiet=False, fuzzy=True)
-
-    # Verify the downloaded file size
-    if os.path.getsize(model_path) != EXPECTED_FILE_SIZE:
-        st.error("The downloaded file size does not match the expected size. Download might be corrupted.")
-        return False
 
     return True
 
