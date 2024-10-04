@@ -48,6 +48,7 @@ download_and_extract_model(MODEL_URL, EXPORT_PATH)
 # Load the model using TFSMLayer for inference
 try:
     model = tf.keras.Sequential([
+        tf.keras.layers.experimental.preprocessing.Rescaling(1./255, input_shape=(224, 224, 3)),  # Rescaling layer to normalize images
         tf.keras.layers.TFSMLayer(EXPORT_PATH, call_endpoint='serving_default')
     ])
 except Exception as e:
@@ -59,7 +60,7 @@ def preprocess_image(image):
     if image.mode != 'RGB':
         image = image.convert('RGB')
     img = image.resize((224, 224))  # Resize to the input size expected by the model
-    img_array = np.array(img) / 255.0  # Normalize pixel values to the [0, 1] range
+    img_array = np.array(img)  # Convert to array
     img_array = np.expand_dims(img_array, axis=0)  # Add a batch dimension: shape (1, 224, 224, 3)
     return img_array
 
