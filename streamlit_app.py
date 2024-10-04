@@ -45,9 +45,11 @@ def download_and_extract_model(url, export_path):
 # Download and extract the model
 download_and_extract_model(MODEL_URL, EXPORT_PATH)
 
-# Load the model
+# Load the model using TFSMLayer for inference
 try:
-    model = tf.keras.models.load_model(EXPORT_PATH)
+    model = tf.keras.Sequential([
+        tf.keras.layers.TFSMLayer(EXPORT_PATH, call_endpoint='serving_default')
+    ])
 except Exception as e:
     st.error(f"Error loading the model: {e}")
     st.stop()
@@ -80,7 +82,7 @@ if uploaded_file is not None:
     
     # Make prediction
     try:
-        predictions = model.predict(input_data)
+        predictions = model(input_data)
         predicted_class = np.argmax(predictions, axis=1)  # Get the index of the highest probability
         
         # Display the result
