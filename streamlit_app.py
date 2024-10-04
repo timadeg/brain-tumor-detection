@@ -7,7 +7,8 @@ import shutil
 import gdown
 
 # URL of the model folder on Google Drive (direct download link)
-MODEL_URL = "https://drive.google.com/uc?id=1DRJQilPlTbcGDd40keqtw8CKro_cr5Yc"  #https://drive.google.com/file/d//view?usp=sharing
+MODEL_URL = "https://drive.google.com/uc?id=1DRJQilPlTbcGDd40keqtw8CKro_cr5Yc"  #
+MODEL_DIR = "model"
 EXPORT_PATH = os.path.join(MODEL_DIR, "models")  # Path to the directory where the model will be saved
 
 # Function to download and extract the model folder
