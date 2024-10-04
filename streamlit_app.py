@@ -7,14 +7,15 @@ import shutil
 import gdown
 
 # URL of the model folder on Google Drive (direct download link)
-MODEL_URL = "https://drive.google.com/uc?id=1DRJQilPlTbcGDd40keqtw8CKro_cr5Yc"  #
+MODEL_URL = "https://drive.google.com/uc?id=1DRJQilPlTbcGDd40keqtw8CKro_cr5Yc"
 MODEL_DIR = "model"
 EXPORT_PATH = os.path.join(MODEL_DIR, "models")  # Path to the directory where the model will be saved
 
 # Function to download and extract the model folder
 def download_and_extract_model(url, export_path):
+    # Remove existing model directory if it exists
     if os.path.exists(export_path):
-        shutil.rmtree(export_path)  # Remove any existing model directory to avoid conflicts
+        shutil.rmtree(export_path)
 
     if not os.path.exists(MODEL_DIR):
         os.makedirs(MODEL_DIR)
@@ -23,11 +24,23 @@ def download_and_extract_model(url, export_path):
     model_zip_path = os.path.join(MODEL_DIR, "model.zip")
     gdown.download(url, model_zip_path, quiet=False, fuzzy=True)
 
+    # Check if the file was downloaded successfully
+    if not os.path.exists(model_zip_path):
+        st.error("Model download failed. Please check the URL and try again.")
+        st.stop()
+
     # Extract the model folder if it is a zip file
-    shutil.unpack_archive(model_zip_path, MODEL_DIR)
+    try:
+        shutil.unpack_archive(model_zip_path, MODEL_DIR)
+    except Exception as e:
+        st.error(f"Error extracting the model: {e}")
+        st.stop()
 
     # Clean up the zip file
-    os.remove(model_zip_path)
+    try:
+        os.remove(model_zip_path)
+    except Exception as e:
+        st.warning(f"Could not remove the zip file: {e}")
 
 # Download and extract the model
 download_and_extract_model(MODEL_URL, EXPORT_PATH)
