@@ -48,7 +48,7 @@ download_and_extract_model(MODEL_URL, EXPORT_PATH)
 # Load the model using TFSMLayer for inference
 try:
     model = tf.keras.Sequential([
-        tf.keras.layers.experimental.preprocessing.Rescaling(1./255, input_shape=(224, 224, 3)),  # Rescaling layer to normalize images
+        tf.keras.layers.Rescaling(1./255, input_shape=(224, 224, 3)),  # Rescaling layer to normalize images
         tf.keras.layers.TFSMLayer(EXPORT_PATH, call_endpoint='serving_default')
     ])
 except Exception as e:
